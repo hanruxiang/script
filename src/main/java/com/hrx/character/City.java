@@ -16,7 +16,7 @@ public class City {
 
     private String pictureUrl = "";
 
-    private String worldMapPictureUrl = "";
+    private String worldMapPicture = "";
 
     public City(String name) {
         this.name = name;

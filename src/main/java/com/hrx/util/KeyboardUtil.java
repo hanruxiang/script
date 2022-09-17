@@ -41,7 +41,8 @@ public class KeyboardUtil {
     }
 
 
-    public static void write(String str)  throws AWTException {
+    public static void write(String str) throws Exception {
+        Thread.sleep(1200);
         //把字符串转换为字符串数组以空格分割
         String[] zh = str.split("");
         //把转换后的字符串数组放到Javarobot的方法中
@@ -1181,8 +1182,6 @@ public class KeyboardUtil {
     }
 
         public static void main(String[] args) throws AWTException{
-            String st = "33";
-            write(st);
         }
 
 }

@@ -1,5 +1,9 @@
 package com.hrx.util;
 
+import com.hrx.common.CommonConstants;
+import com.hrx.common.TwoTuple;
+import com.jacob.com.Dispatch;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 
@@ -71,6 +75,37 @@ public class MouseUtil {
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
         // 等待动画时间
         Thread.sleep(1200);
+    }
+
+    public static void findPictureAnkLeftClick(Dispatch dmCom, String pictureName) throws InterruptedException {
+        //1、找到图片
+        TwoTuple<Integer, Integer> point = DaMoApi.findPic(dmCom, 0, 0, 2000, 2000, pictureName, "000000");
+        if (-1 == point.x &&  -1 == point.y) {
+            return;
+        }
+        //2、鼠标移动到图片上
+        DaMoApi.moveMouse(dmCom, point.x, point.y);
+        //3、点击图片
+        DaMoApi.leftClick(dmCom);
+    }
+
+    public static void findPictureAnkRightClick(Dispatch dmCom, String pictureName) throws InterruptedException {
+        //1、找到图片
+        TwoTuple<Integer, Integer> point = DaMoApi.findPic(dmCom, 0, 0, 2000, 2000, pictureName, "000000");
+        if (-1 == point.x &&  -1 == point.y) {
+            return;
+        }
+        //2、鼠标移动到图片上
+        DaMoApi.moveMouse(dmCom, point.x, point.y);
+        //3、点击图片
+        DaMoApi.rightClick(dmCom);
+    }
+
+    public static void moveAndClick(Dispatch dmCom, Integer x, Integer y) throws InterruptedException {
+        //1、鼠标移动到NPC坐标
+        DaMoApi.moveMouse(dmCom, x, y);
+        //2、点击NPC
+        DaMoApi.leftClick(dmCom);
     }
 
 }

@@ -7,6 +7,9 @@ import com.jacob.com.Variant;
 
 import java.awt.*;
 
+/**
+ * @author hrx
+ */
 public class TestDM {
 
     public static void main(String args[]) throws AWTException {
@@ -16,7 +19,7 @@ public class TestDM {
         //利用ActiveXComponent实例化一个大漠组件对象
         ActiveXComponent dm = new ActiveXComponent("dm.dmsoft");
         //创建连接&调用对象Dispatch的实例
-        Dispatch dmCom = (Dispatch)dm.getObject();
+        Dispatch dmCom = dm.getObject();
         //通过Dispatch调用大漠dll中的Ver方法，并以Variant接受返回结果，此处为版本号
         Variant variant = Dispatch.call(dmCom, "Ver");
         System.out.println(variant.toString());

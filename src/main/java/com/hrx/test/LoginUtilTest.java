@@ -8,6 +8,7 @@ import com.hrx.util.LoginUtil;
 public class LoginUtilTest {
 
     public static void main(String[] args) throws Exception {
-        LoginUtil.getCurrentScreenGameRole();
+
+
     }
 }
