@@ -14,7 +14,7 @@ public class City {
 
     private String name = "";
 
-    private String pictureUrl = "";
+    private String picture = "";
 
     private String worldMapPicture = "";
 

@@ -3,7 +3,7 @@ package com.hrx.common;
 import com.hrx.character.City;
 import com.hrx.character.Npc;
 import com.hrx.util.*;
-import com.jacob.com.Dispatch;
+import com.qiyou.javaelf.system.Elf;
 
 import java.awt.event.KeyEvent;
 
@@ -23,7 +23,7 @@ public class CommonConstants {
         /**
          * 苏州 苏州的图片 世界地图截取 todo
          */
-        public static final City SU_ZHOU = new City("苏州", "", "su_zhou.bmp");
+        public static final City SU_ZHOU = new City("苏州", "SU_ZHOU_TEXT.bmp", "su_zhou.bmp");
     }
 
     public static class NpcConstants {
@@ -35,49 +35,48 @@ public class CommonConstants {
          */
         public static final Npc 吴玠 = new Npc("吴玠", CityConstants.SU_ZHOU, 130, 132, 298,401, "惩恶打图.bmp"){
             @Override
-            public void doTask(Dispatch dmCom) throws Exception{
+            public void doTask(Elf elf) throws Exception{
                 //1、鼠标点击NPC坐标
-                MouseUtil.moveAndClick(dmCom, getScreenX(), getScreenY());
+                MouseUtil.moveAndClick(elf, getScreenX(), getScreenY());
                 //2、点击惩恶打图任务图片
-                MouseUtil.findPictureAnkLeftClick(dmCom, getTaskPicture());
+                MouseUtil.findPictureAnkLeftClick(elf, getTaskPicture());
                 //3、点击继续按钮 交任务
-                TwoTuple<Integer, Integer> point = DaMoApi.findPic(dmCom, 0, 0, 2000, 2000, CommonConstants.PictureConstants.继续, "000000");
+                TwoTuple<Integer, Integer> point = DaMoApi.findPic(elf, 0, 0, 2000, 2000, CommonConstants.PictureConstants.继续, "000000");
                 if (-1 != point.x &&  -1 != point.y) {
-                    DaMoApi.moveMouse(dmCom, point.x, point.y);
-                    DaMoApi.leftClick(dmCom);
-                    DaMoApi.leftClick(dmCom);
+                    DaMoApi.moveMouse(elf, point.x, point.y);
+                    DaMoApi.leftClick(elf);
+                    DaMoApi.leftClick(elf);
                     //1、鼠标点击NPC坐标
-                    MouseUtil.moveAndClick(dmCom, getScreenX(), getScreenY());
+                    MouseUtil.moveAndClick(elf, getScreenX(), getScreenY());
                     //2、点击惩恶打图任务图片
-                    MouseUtil.findPictureAnkLeftClick(dmCom, getTaskPicture());
+                    MouseUtil.findPictureAnkLeftClick(elf, getTaskPicture());
                 }
                 //3、打开背包
                 KeyboardUtil.keyPressMore(new int[]{KeyEvent.VK_ALT, KeyEvent.VK_A});
                 //4、切换到任务物品
-                MouseUtil.findPictureAnkLeftClick(dmCom, CommonConstants.PictureConstants.背包任务物品栏目);
+                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.背包任务物品栏目);
                 //5、右击打图令牌
-                MouseUtil.findPictureAnkRightClick(dmCom, CommonConstants.PictureConstants.惩恶令牌);
+                MouseUtil.findPictureAnkRightClick(elf, CommonConstants.PictureConstants.惩恶令牌);
                 //6、点击坐标
-                MouseUtil.findPictureAnkLeftClick(dmCom, CommonConstants.PictureConstants.打图坐标);
+                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.打图坐标);
                 //7、点击确认按钮
-                MouseUtil.findPictureAnkLeftClick(dmCom, CommonConstants.PictureConstants.去往场景确认按钮);
+                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.去往场景确认按钮);
                 //8、确认是否已经到达 todo
                 Thread.sleep(120000);
-
                 //9、点击坐骑按钮
-                MouseUtil.findPictureAnkLeftClick(dmCom, CommonConstants.PictureConstants.坐骑按钮);
+                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.坐骑按钮);
                 //10、打开背包
                 KeyboardUtil.keyPressMore(new int[]{KeyEvent.VK_ALT, KeyEvent.VK_A});
                 //11、切换到任务物品
-                MouseUtil.findPictureAnkLeftClick(dmCom, CommonConstants.PictureConstants.背包任务物品栏目);
+                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.背包任务物品栏目);
                 //12、右击打图令牌
-                MouseUtil.findPictureAnkRightClick(dmCom, CommonConstants.PictureConstants.惩恶令牌);
+                MouseUtil.findPictureAnkRightClick(elf, CommonConstants.PictureConstants.惩恶令牌);
                 //13、选择目标怪打
-                AttackUtil.autoChooseAttack(dmCom, CommonConstants.PictureConstants.打图目标怪图片, 1);
+                AttackUtil.autoChooseAttack(elf, CommonConstants.PictureConstants.打图目标怪图片, 1);
                 //14、捡包裹 todo
 
                 //15、点击坐骑按钮
-                MouseUtil.findPictureAnkLeftClick(dmCom, CommonConstants.PictureConstants.坐骑按钮);
+                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.坐骑按钮);
             }
         };
 
@@ -194,17 +193,17 @@ public class CommonConstants {
         /**
          * 屏幕模式 字符串："normal"(前台模式) "gdi"(后台模式)
          */
-        public static final String SCREEN_MODEL = "gdi2";
+        public static final String SCREEN_MODEL = "normal";
 
         /**
          * 鼠标模式 字符串："normal"(前台模式) "windows"(后台模式)
          */
-        public static final String MOUSE_MODEL = "windows";
+        public static final String MOUSE_MODEL = "normal";
 
         /**
          * 键盘模式 字符串："normal"(前台模式) "windows"(后台模式)
          */
-        public static final String KEYPAD_MODEL = "windows";
+        public static final String KEYPAD_MODEL = "normal";
 
         /**
          * mode 模式 整形数：默认0

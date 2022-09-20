@@ -3,11 +3,9 @@ package com.hrx.job;
 import com.hrx.character.GameRole;
 import com.hrx.common.CommonConstants;
 import com.hrx.util.DaMoApi;
-import com.hrx.util.LoginUtil;
 import com.hrx.util.MouseUtil;
-import com.jacob.activeX.ActiveXComponent;
-import com.jacob.com.ComThread;
-import com.jacob.com.Dispatch;
+import com.qiyou.javaelf.elf.GlobalSetting;
+import com.qiyou.javaelf.system.Elf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,67 +22,44 @@ public class DaTuJob {
     private static List<GameRole> gameRoles = new ArrayList<>(16);
 
     public static void main(String[] args) throws Exception {
+        GlobalSetting.copy_dlls();
+        Elf.init();//全局只调用一次,提供带参的方法自定义dm版本;
         new Thread(() ->{
             try {
-                //将当前Java线程初始化为STA单线程单元(影响Java-dll数据通信)
-                ComThread.InitSTA();
-                //利用ActiveXComponent实例化一个大漠组件对象
-                ActiveXComponent dm = new ActiveXComponent("dm.dmsoft");
-                //创建连接&调用对象Dispatch的实例
-                Dispatch dmCom = dm.getObject();
+                Elf elf = new Elf();
                 //绑定窗口
-                DaMoApi.bindWindow(dmCom, 198840);
-                DaMoApi.setPath(dmCom, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data");
+                DaMoApi.bindWindow(elf, 591866);
+                DaMoApi.setPath(elf, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data");
                 //DaMoApi.setDict(dmCom, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data\\ziku.txt");
                 Thread.sleep(2000);
                 //执行任务
-                doJob(dmCom,"Bigdecimal");
+                doJob(elf,"Integer");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
-   /*     new Thread(() ->{
-            try {
-                //将当前Java线程初始化为STA单线程单元(影响Java-dll数据通信)
-                ComThread.InitSTA();
-                //利用ActiveXComponent实例化一个大漠组件对象
-                ActiveXComponent dm = new ActiveXComponent("dm.dmsoft");
-                //创建连接&调用对象Dispatch的实例
-                Dispatch dmCom = dm.getObject();
-                //绑定窗口
-                DaMoApi.bindWindow(dmCom, 1511302);
-                DaMoApi.setPath(dmCom, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data");
-                //DaMoApi.setDict(dmCom, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data\\ziku.txt");
-                Thread.sleep(2000);
-                //执行任务
-                doJob(dmCom, "Integer");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();*/
     }
 
-
-    private static void doJob(Dispatch dmCom, String roleName) throws Exception {
+    private static void doJob(Elf elf, String roleName) throws Exception {
         Thread.sleep(2000);
         //1、匹配角色
-        GameRole currentRole = new GameRole(roleName, dmCom);
+        GameRole currentRole = new GameRole(roleName, elf);
         //2、点击坐骑按钮
-        MouseUtil.findPictureAnkLeftClick(dmCom, CommonConstants.PictureConstants.坐骑按钮);
+        MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.坐骑按钮);
         for (int i = 1; i < 50; i++) {
             Thread.sleep(3000);
             //3、找到NPC
             currentRole.moveToNpc(CommonConstants.NpcConstants.吴玠);
             //4、做任务
-            currentRole.doTask(CommonConstants.NpcConstants.吴玠, dmCom);
+            currentRole.doTask(CommonConstants.NpcConstants.吴玠, elf);
         }
 
     }
 
-    private static GameRole getRoleByName(String roleName, Dispatch dmCom) throws Exception {
+    private static GameRole getRoleByName(String roleName, Elf elf) throws Exception {
         GameRole newGameRole;
         if (null == gameRoles || CommonConstants.ZERO == gameRoles.size()) {
-            newGameRole = new GameRole(roleName, dmCom);
+            newGameRole = new GameRole(roleName, elf);
             gameRoles.add(newGameRole);
             return newGameRole;
         }
@@ -94,7 +69,7 @@ public class DaTuJob {
                 return newGameRole;
             }
         }
-        newGameRole = new GameRole(roleName, dmCom);
+        newGameRole = new GameRole(roleName, elf);
         gameRoles.add(newGameRole);
         return newGameRole;
     }

@@ -2,10 +2,10 @@ package com.hrx.util;
 
 import com.hrx.common.CommonConstants;
 import com.hrx.common.TwoTuple;
-import com.jacob.com.Dispatch;
-import com.jacob.com.Variant;
+import com.qiyou.javaelf.operation.*;
+import com.qiyou.javaelf.system.Elf;
+import org.jawin.COMException;
 
-import java.awt.event.KeyEvent;
 
 /**
  * 大漠APi
@@ -13,13 +13,13 @@ import java.awt.event.KeyEvent;
  */
 public class DaMoApi {
 
+
     /**
-     * 綁定窗口
-     * @param dmCom 大漠对象
-     * @param hwnd 窗口句柄
+     * 注册
+     * @param elf 大漠对象
      * @return
      */
-    public static boolean bindWindow(Dispatch dmCom, Integer hwnd) {
+    public static boolean reg(Elf elf, String code, String ver) throws COMException {
         /**
          * 通过Dispatch调用大漠dll中的BindWindow方法，并以Variant接受返回结果
          * long BindWindow(hwnd,display,mouse,keypad,mode)
@@ -31,30 +31,93 @@ public class DaMoApi {
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "BindWindowEx",
+        int result = elf.Reg(code,ver);
+        if (CommonConstants.ONE_STRING.equals(result + "")) {
+            System.out.println("注册成功！");
+        } else {
+            System.out.println("注册失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result + "");
+    }
+
+    /**
+     * 綁定窗口
+     * @param elf 大漠对象
+     * @param hwnd 窗口句柄
+     * @return
+     */
+    public static boolean bindWindow(Elf elf, Integer hwnd) {
+        /**
+         * 通过Dispatch调用大漠dll中的BindWindow方法，并以Variant接受返回结果
+         * long BindWindow(hwnd,display,mouse,keypad,mode)
+         * hwnd 整形数: 指定的窗口句柄
+         * display 屏幕模式 字符串："normal"(前台模式) "gdi"(后台模式)
+         * mouse 鼠标模式 字符串："normal"(前台模式) "windows"(后台模式)
+         * keypad 键盘模式 字符串："normal"(前台模式) "windows"(后台模式)
+         * mode 模式 整形数：默认0
+         * 返回值: 整形数: 0: 失败 1: 成功
+         *
+         */
+        Object[] params = new Object[]{
                 hwnd,
                 CommonConstants.DaMoConstants.SCREEN_MODEL,
                 CommonConstants.DaMoConstants.MOUSE_MODEL,
                 CommonConstants.DaMoConstants.KEYPAD_MODEL,
-                "dx.public.disable.window.position",
                 CommonConstants.DaMoConstants.MODEL
-        );
-        System.out.println("绑定窗口成功,窗口句柄:" + hwnd);
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        };
+        String result = elf.execute(Background.class, BackgroundOperations.BindWindow, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("绑定窗口成功,窗口句柄:" + hwnd);
+        } else {
+            System.out.println("绑定窗口失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
 
+    /**
+     * 綁定窗口
+     * @param elf 大漠对象
+     * @param hwnd 窗口句柄
+     * @return
+     */
+    public static boolean bindWindowEx(Elf elf, Integer hwnd) {
+        /**
+         * 通过Dispatch调用大漠dll中的BindWindow方法，并以Variant接受返回结果
+         * long BindWindow(hwnd,display,mouse,keypad,mode)
+         * hwnd 整形数: 指定的窗口句柄
+         * display 屏幕模式 字符串："normal"(前台模式) "gdi"(后台模式)
+         * mouse 鼠标模式 字符串："normal"(前台模式) "windows"(后台模式)
+         * keypad 键盘模式 字符串："normal"(前台模式) "windows"(后台模式)
+         * mode 模式 整形数：默认0
+         * 返回值: 整形数: 0: 失败 1: 成功
+         *
+         */
+        Object[] params = new Object[]{
+                hwnd,
+                CommonConstants.DaMoConstants.SCREEN_MODEL,
+                "dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.clip.lock.api|dx.mouse.input.lock.api|dx.mouse.state.api|dx.mouse.api|dx.mouse.cursor",
+                "dx.keypad.input.lock.api|dx.keypad.state.api|dx.keypad.api",
+                "",
+                CommonConstants.DaMoConstants.MODEL
+        };
+        String result = elf.execute(Background.class, BackgroundOperations.BindWindowEx, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("绑定窗口成功,窗口句柄:" + hwnd);
+        } else {
+            System.out.println("绑定窗口失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
+    }
 
     /**
      * 移动鼠标
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @param x X坐标
      * @param y Y坐标
      * @return
      */
-    public static boolean moveMouse(Dispatch dmCom, Integer x, Integer y) throws InterruptedException {
-        Thread.sleep(RandomUtil.getRandomInt(3000, 3500));
+    public static boolean moveMouse(Elf elf, Integer x, Integer y) throws InterruptedException {
+        Thread.sleep(RandomUtil.getRandomInt(1000, 1500));
         /**
          * 通过Dispatch调用大漠dll中的long MoveTo(x,y)方法，并以Variant接受返回结果
          * x 整形数:X坐标
@@ -62,103 +125,119 @@ public class DaMoApi {
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "MoveTo",
+        Object[] params = new Object[]{
                 x,
                 y
-        );
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        };
+        String result = elf.execute(Mouse.class, MouseOperations.MoveTo, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("鼠标移动成功");
+        } else {
+            System.out.println("鼠标移动失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
 
     /**
      * 左击
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @return
      */
-    public static boolean leftClick(Dispatch dmCom) throws InterruptedException {
-        Thread.sleep(RandomUtil.getRandomInt(3000, 3500));
+    public static boolean leftClick(Elf elf) throws InterruptedException {
+        Thread.sleep(RandomUtil.getRandomInt(1000, 1500));
         /**
          * 通过Dispatch调用大漠dll中的long MoveTo(x,y)方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "LeftClick"
-        );
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        Object[] params = new Object[]{};
+        String result = elf.execute(Mouse.class, MouseOperations.LeftClick, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("鼠标左击成功");
+        } else {
+            System.out.println("鼠标左击失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
 
     /**
      * 左双击
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @return
      */
-    public static boolean leftDoubleClick(Dispatch dmCom) throws InterruptedException {
+    public static boolean leftDoubleClick(Elf elf) throws InterruptedException {
         Thread.sleep(RandomUtil.getRandomInt(1000, 1500));
         /**
          * 通过Dispatch调用大漠dll中的long LeftDoubleClick()方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "LeftDoubleClick"
-        );
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        Object[] params = new Object[]{};
+        String result = elf.execute(Mouse.class, MouseOperations.LeftDoubleClick, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("鼠标左双击成功");
+        } else {
+            System.out.println("鼠标左双击失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
 
     /**
      * 右击
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @return
      */
-    public static boolean rightClick(Dispatch dmCom) throws InterruptedException {
+    public static boolean rightClick(Elf elf) throws InterruptedException {
         Thread.sleep(RandomUtil.getRandomInt(1000, 1500));
         /**
          * 通过Dispatch调用大漠dll中的long RightClick()方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "RightClick"
-        );
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        Object[] params = new Object[]{};
+        String result = elf.execute(Mouse.class, MouseOperations.RightClick, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("鼠标右击成功");
+        } else {
+            System.out.println("鼠标右击失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
 
     /**
      * 按下键盘
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @return
      */
-    public static boolean keyPress(Dispatch dmCom, Integer vkCode) {
+    public static boolean keyPress(Elf elf, Integer vkCode) {
         /**
          * 通过Dispatch调用大漠dll中的long KeyPress(vk_code)方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "KeyPress",
-                vkCode
-        );
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        Object[] params = new Object[]{vkCode};
+        String result = elf.execute(Keyboard.class, KeyboardOperations.KeyPress, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("鼠标右击成功");
+        } else {
+            System.out.println("鼠标右击失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
 
     /**
      * 指定区域找色
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @return
      */
-    public static TwoTuple<Integer, Integer> findMultiColor(Dispatch dmCom,
+    public static TwoTuple<Integer, Integer> findMultiColor(Elf elf,
                                           Integer x1,
                                           Integer y1,
                                           Integer x2,
                                           Integer y2,
                                           String firstColor,
-                                          String offsetColor) {
+                                          String offsetColor) throws Exception {
+        Thread.sleep(RandomUtil.getRandomInt(1000, 1500));
         /**
          * 通过Dispatch调用大漠dll中的long FindMultiColor(x1, y1, x2, y2,first_color,offset_color,sim, dir,intX,intY)方法，并以Variant接受返回结果
          * first_color 字符串:颜色格式为"RRGGBB-DRDGDB|RRGGBB-DRDGDB|…………",比如"123456-000000"
@@ -176,35 +255,31 @@ public class DaMoApi {
          * intY 变参指针:返回Y坐标(坐标为first_color所在坐标)
          *
          */
-        Variant vars[] = new Variant[10];
-        vars[0] = new Variant(x1,true);
-        vars[1] = new Variant(y1,true);
-        vars[2] = new Variant(x2,true);
-        vars[3] = new Variant(y2,true);
-        vars[4] = new Variant(firstColor,true);
-        vars[5] = new Variant(offsetColor,true);
-        vars[6] = new Variant(0.9,true);
-        vars[7] = new Variant(0,true);
-        vars[8] = new Variant(-1,true);
-        vars[9] = new Variant(-1,true);
-
-        Variant variant = Dispatch.call(
-                dmCom,
-                "FindMultiColor",
-                vars
-        );
-        System.out.println("variant : " + variant.toString());
-        System.out.println("兑点找图坐标，x : " + vars[8] + "  y : " + vars[9]);
-        return new TwoTuple(vars[8].getInt(), vars[9].getInt());
+        Integer x = new Integer(-1);
+        Integer y = new Integer(-1);
+        Object[] params = new Object[]{
+                x1,
+                y1,
+                x2,
+                y2,
+                firstColor,
+                offsetColor,
+                0.9,
+                0,
+                x,
+                y};
+        elf.execute(Picture.class, PictureOperations.FindMultiColor, params).toString();
+        System.out.println("指定区域找色坐标，x : " + x + "  y : " + x);
+        return new TwoTuple(x, y);
     }
 
 
     /**
-     * 指定区域找色
-     * @param dmCom 大漠对象
+     * 指定区域找图
+     * @param elf 大漠对象
      * @return
      */
-    public static TwoTuple<Integer, Integer> findPic(Dispatch dmCom,
+    public static TwoTuple<Integer, Integer> findPic(Elf elf,
                                                             Integer x1,
                                                             Integer y1,
                                                             Integer x2,
@@ -225,34 +300,30 @@ public class DaMoApi {
          * intY 变参指针:返回图片左上角的Y坐标
          *
          */
-        Variant vars[] = new Variant[10];
-        vars[0] = new Variant(x1,true);
-        vars[1] = new Variant(y1,true);
-        vars[2] = new Variant(x2,true);
-        vars[3] = new Variant(y2,true);
-        vars[4] = new Variant(picName,true);
-        vars[5] = new Variant(deltaColor,true);
-        vars[6] = new Variant(0.9,true);
-        vars[7] = new Variant(0,true);
-        vars[8] = new Variant(-1,true);
-        vars[9] = new Variant(-1,true);
-
-        Variant variant = Dispatch.call(
-                dmCom,
-                "FindPic",
-                vars
-        );
-        System.out.println("variant : " + variant.toString());
-        System.out.println("兑点找图坐标，x : " + vars[8] + "  y : " + vars[9]);
-        return new TwoTuple(vars[8].getInt(), vars[9].getInt());
+        Integer x = new Integer(-1);
+        Integer y = new Integer(-1);
+        Object[] params = new Object[]{
+                x1,
+                y1,
+                x2,
+                y2,
+                picName,
+                deltaColor,
+                0.9,
+                0,
+                x,
+                y};
+        elf.execute(Picture.class, PictureOperations.FindPic, params).toString();
+        System.out.println("指定区域找图坐标，x : " + x + "  y : " + x);
+        return new TwoTuple(x, y);
     }
 
     /**
      * 指定区域找字
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @return
      */
-    public static TwoTuple<Integer, Integer> findStr(Dispatch dmCom,
+    public static TwoTuple<Integer, Integer> findStr(Elf elf,
                                                      Integer x1,
                                                      Integer y1,
                                                      Integer x2,
@@ -271,66 +342,68 @@ public class DaMoApi {
          * intY 变参指针:返回Y坐标没找到返回-1
          *
          */
-        Variant vars[] = new Variant[10];
-        vars[0] = new Variant(x1,true);
-        vars[1] = new Variant(y1,true);
-        vars[2] = new Variant(x2,true);
-        vars[3] = new Variant(y2,true);
-        vars[4] = new Variant(string,true);
-        vars[5] = new Variant(colorFormat,true);
-        vars[6] = new Variant(0.9,true);
-        vars[8] = new Variant(-1,true);
-        vars[9] = new Variant(-1,true);
 
-        Variant variant = Dispatch.call(
-                dmCom,
-                "FindStr",
-                vars
-        );
-        System.out.println("variant : " + variant.toString());
-        System.out.println("兑点找字坐标，x : " + vars[8] + "  y : " + vars[9]);
-        return new TwoTuple(vars[8].getInt(), vars[9].getInt());
+        Integer x = new Integer(-1);
+        Integer y = new Integer(-1);
+        Object[] params = new Object[]{
+                x1,
+                y1,
+                x2,
+                y2,
+                string,
+                colorFormat,
+                0.9,
+                0,
+                x,
+                y};
+        elf.execute(Ocr.class, OcrOperations.FindStr, params).toString();
+        System.out.println("指定区域找字坐标，x : " + x + "  y : " + x);
+        return new TwoTuple(x, y);
     }
 
 
     /**
      * 设置资源路径
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @param path 字符串: 路径,可以是相对路径,也可以是绝对路径
      * @return
      */
-    public static boolean setPath(Dispatch dmCom, String path) {
+    public static boolean setPath(Elf elf, String path) {
         /**
          * 通过Dispatch调用大漠dll中的long SetPath(path)方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "SetPath",
-                path
-        );
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        Object[] params = new Object[]{path};
+        String result = elf.execute(Background.class, BasicSettingOperations.SetPath, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("设置资源路径成功");
+        } else {
+            System.out.println("设置资源路径失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
+
     /**
      * 设置字库路径
-     * @param dmCom 大漠对象
+     * @param elf 大漠对象
      * @param file 字符串: 路径,可以是相对路径,也可以是绝对路径
      * @return
      */
-    public static boolean setDict(Dispatch dmCom, String file) {
+    public static boolean setDict(Elf elf, String file) {
         /**
          * 通过Dispatch调用大漠dll中的long SetDict(index,file)方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Variant variant = Dispatch.call(
-                dmCom,
-                "SetDict",
-                0,
-                file
-        );
-        return CommonConstants.ONE_STRING.equals(variant.toString());
+        Object[] params = new Object[]{file};
+        String result = elf.execute(Ocr.class, OcrOperations.SetDict, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("设置字库路径成功");
+        } else {
+            System.out.println("设置字库路径失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
     }
 
 

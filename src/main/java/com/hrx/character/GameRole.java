@@ -1,7 +1,7 @@
 package com.hrx.character;
 
 import com.hrx.util.*;
-import com.jacob.com.Dispatch;
+import com.qiyou.javaelf.system.Elf;
 import lombok.Data;
 
 /**
@@ -18,14 +18,14 @@ public class GameRole extends Character {
     private Integer bloodVolume;
 
 
-    private Dispatch dmCom;
+    private Elf elf;
 
-    public GameRole(String name, Dispatch dmCom) throws Exception {
+    public GameRole(String name, Elf elf) throws Exception {
         super();
         this.setName(name);
         //获取当前城市
         this.setCity(new City());
-        this.setDmCom(dmCom);
+        this.setElf(elf);
     }
 
     public void moveToCity(City city) throws Exception {
@@ -34,20 +34,22 @@ public class GameRole extends Character {
             return;
         }
         //2、移动到目标场景
-        WorldMapUtil.moveToCity(city, dmCom);
+        WorldMapUtil.moveToCity(city, elf);
+        while (WorldMapUtil.isArrived(city, elf)) {
+            //3、每5S检测一次
+            Thread.sleep(5000);
+        }
     }
 
     public void moveToNpc(Npc npc) throws Exception {
         //1、移动到城市
         moveToCity(npc.getCity());
-        //2、等待时间
-        Thread.sleep(8000);
         //2、移动到NPC坐标
-        AutoRunUtil.moveToXy(dmCom, npc.getLocationX(), npc.getLocationY());
+        AutoRunUtil.moveToXy(elf, npc.getLocationX(), npc.getLocationY());
     }
 
-    public void doTask(Npc npc, Dispatch dmCom) throws Exception{
-        npc.doTask(dmCom);
+    public void doTask(Npc npc, Elf elf) throws Exception{
+        npc.doTask(elf);
     }
 
 

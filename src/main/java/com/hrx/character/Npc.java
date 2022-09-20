@@ -1,6 +1,6 @@
 package com.hrx.character;
 
-import com.jacob.com.Dispatch;
+import com.qiyou.javaelf.system.Elf;
 import lombok.Data;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class Npc extends Character {
         this.taskPicture = taskPicture;
     }
 
-    public void doTask(Dispatch dmCom) throws Exception{
+    public void doTask(Elf elf) throws Exception{
 
     }
 
