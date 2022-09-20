@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class DaMoApiTest {
 
-    public static void main(String[] args) throws InterruptedException, IOException, COMException {
+    public static void main(String[] args) throws Exception {
         GlobalSetting.copy_dlls();
         Elf.init();//全局只调用一次,提供带参的方法自定义dm版本;
         Elf elf = new Elf();

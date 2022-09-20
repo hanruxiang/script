@@ -361,27 +361,25 @@ public class DaMoApi {
         return new TwoTuple(x, y);
     }
 
-
     /**
      * 设置资源路径
      * @param elf 大漠对象
      * @param path 字符串: 路径,可以是相对路径,也可以是绝对路径
      * @return
      */
-    public static boolean setPath(Elf elf, String path) {
+    public static boolean setPath(Elf elf, String path) throws Exception {
         /**
          * 通过Dispatch调用大漠dll中的long SetPath(path)方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        Object[] params = new Object[]{path};
-        String result = elf.execute(Background.class, BasicSettingOperations.SetPath, params).toString();
-        if (CommonConstants.ONE_STRING.equals(result)) {
+        int result = elf.SetPath(path);
+        if (CommonConstants.ONE_STRING.equals(result + "")) {
             System.out.println("设置资源路径成功");
         } else {
             System.out.println("设置资源路径失败！");
         }
-        return CommonConstants.ONE_STRING.equals(result);
+        return CommonConstants.ONE_STRING.equals(result + "");
     }
 
     /**
