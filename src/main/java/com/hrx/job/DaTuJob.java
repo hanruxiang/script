@@ -6,7 +6,6 @@ import com.hrx.util.DaMoApi;
 import com.hrx.util.MouseUtil;
 import com.qiyou.javaelf.elf.GlobalSetting;
 import com.qiyou.javaelf.system.Elf;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +21,13 @@ public class DaTuJob {
     private static List<GameRole> gameRoles = new ArrayList<>(16);
 
     public static void main(String[] args) throws Exception {
-        GlobalSetting.copy_dlls();
         Elf.init();//全局只调用一次,提供带参的方法自定义dm版本;
         new Thread(() ->{
             try {
                 Elf elf = new Elf();
                 //绑定窗口
                 DaMoApi.bindWindow(elf, 591866);
-                DaMoApi.setPath(elf, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data");
+                DaMoApi.setPath(elf);
                 //DaMoApi.setDict(dmCom, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data\\ziku.txt");
                 Thread.sleep(2000);
                 //执行任务
@@ -74,4 +72,24 @@ public class DaTuJob {
         return newGameRole;
     }
 
+    public static void execute(String code, String ver) throws Exception {
+        //全局只调用一次,提供带参的方法自定义dm版本;
+        Elf.init();
+        new Thread(() ->{
+            try {
+                Elf elf = new Elf();
+                //登录
+                DaMoApi.reg(elf, code, ver);
+                //绑定窗口
+                DaMoApi.bindWindow(elf, 591866);
+                DaMoApi.setPath(elf);
+                //DaMoApi.setDict(dmCom, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data\\ziku.txt");
+                Thread.sleep(2000);
+                //执行任务
+                doJob(elf,"Integer");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 }

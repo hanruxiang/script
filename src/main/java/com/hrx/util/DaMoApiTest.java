@@ -30,7 +30,7 @@ public class DaMoApiTest {
         DaMoApi.leftClick(dmCom);*/
         //DaMoApi.keyPress(dmCom, KeyEvent.VK_A);
 
-        DaMoApi.setPath(elf, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data");
+        DaMoApi.setPath(elf);
 
       /*  TwoTuple<Integer, Integer> xy = DaMoApi.findPic(dmCom, 0,0, 2000,2000, "eee.bmp", "000000");
         DaMoApi.moveMouse(dmCom, xy.x,xy.y);

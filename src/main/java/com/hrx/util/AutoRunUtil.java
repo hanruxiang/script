@@ -28,8 +28,6 @@ public class AutoRunUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        //1、打开自动寻路窗口
-        TwoTuple<Integer, Integer> autoRunButtonPoint = FindPsoUtil.findPoint(CommonConstants.PictureConstants.自动寻路按钮);
     }
 
 }

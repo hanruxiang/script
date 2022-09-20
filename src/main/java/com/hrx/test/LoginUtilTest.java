@@ -1,7 +1,5 @@
 package com.hrx.test;
 
-import com.hrx.util.LoginUtil;
-
 /**
  * @author hrx
  */

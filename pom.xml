@@ -13,14 +13,7 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-
     <dependencies>
-
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tesseract-platform</artifactId>
-            <version>4.1.1-1.5.3</version>
-        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -30,12 +23,35 @@
         </dependency>
 
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.7.12</version>
+            <groupId>com.qiyou.javaelf</groupId>
+            <artifactId>javaElt</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/resources/lib/JavaElf-1.0-SNAPSHOT-jar-with-dependencies.jar</systemPath>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                    <mainClass>com.hrx.window.DaTuJobWindow</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 
 
 

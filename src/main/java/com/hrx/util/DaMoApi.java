@@ -6,6 +6,8 @@ import com.qiyou.javaelf.operation.*;
 import com.qiyou.javaelf.system.Elf;
 import org.jawin.COMException;
 
+import java.io.File;
+
 
 /**
  * 大漠APi
@@ -364,16 +366,16 @@ public class DaMoApi {
     /**
      * 设置资源路径
      * @param elf 大漠对象
-     * @param path 字符串: 路径,可以是相对路径,也可以是绝对路径
      * @return
      */
-    public static boolean setPath(Elf elf, String path) throws Exception {
+    public static boolean setPath(Elf elf) throws Exception {
         /**
          * 通过Dispatch调用大漠dll中的long SetPath(path)方法，并以Variant接受返回结果
          * 返回值: 整形数: 0: 失败 1: 成功
          *
          */
-        int result = elf.SetPath(path);
+        String imagesPath = System.getProperty("java.home")+"/bin/image";
+        int result = elf.SetPath(new File(imagesPath).getCanonicalPath());
         if (CommonConstants.ONE_STRING.equals(result + "")) {
             System.out.println("设置资源路径成功");
         } else {
