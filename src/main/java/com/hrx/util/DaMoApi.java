@@ -43,6 +43,43 @@ public class DaMoApi {
     }
 
     /**
+     * 枚举窗口
+     * @param elf 大漠对象
+     * @return 窗口句柄
+     */
+    public static String enumWindows(Elf elf) {
+        /**
+         * 通过Dispatch调用大漠dll中的BindWindow方法，并以Variant接受返回结果
+         * string EnumWindow(parent,title,class_name,filter)
+         * parent 整形数: 获得的窗口句柄是该窗口的子窗口的窗口句柄,取0时为获得桌面句柄
+         * title 字符串: 窗口标题. 此参数是模糊匹配.
+         * class_name 字符串: 窗口类名. 此参数是模糊匹配.
+         * filter整形数: 取值定义如下
+         * 1 : 匹配窗口标题,参数title有效
+         * 2 : 匹配窗口类名,参数class_name有效.
+         * 4 : 只匹配指定父窗口的第一层孩子窗口
+         * 8 : 匹配父窗口为0的窗口,即顶级窗口
+         * 16 : 匹配可见的窗口
+         * 32 : 匹配出的窗口按照窗口打开顺序依次排列
+         * 这些值可以相加,比如4+8+16就是类似于任务管理器中的窗口列表
+         *
+         */
+        Object[] params = new Object[]{
+                0,
+                "新天龙八部",
+                "TianLongBaBuHJ WndClass",
+                1+2
+        };
+        String result = elf.execute(Window.class, WindowOperations.EnumWindow, params).toString();
+        if (!CommonConstants.EMPTY_STRING.equals(result)) {
+            System.out.println("枚举窗口成功,窗口句柄:" + result);
+        } else {
+            System.out.println("枚举窗口失败！");
+        }
+        return result;
+    }
+
+    /**
      * 綁定窗口
      * @param elf 大漠对象
      * @param hwnd 窗口句柄
@@ -220,12 +257,55 @@ public class DaMoApi {
         Object[] params = new Object[]{vkCode};
         String result = elf.execute(Keyboard.class, KeyboardOperations.KeyPress, params).toString();
         if (CommonConstants.ONE_STRING.equals(result)) {
-            System.out.println("鼠标右击成功");
+            System.out.println("按下键盘成功");
         } else {
-            System.out.println("鼠标右击失败！");
+            System.out.println("按下键盘失败！");
         }
         return CommonConstants.ONE_STRING.equals(result);
     }
+
+    /**
+     * 弹起键盘
+     * @param elf 大漠对象
+     * @return
+     */
+    public static boolean keyUp(Elf elf, Integer vkCode) {
+        /**
+         * 通过Dispatch调用大漠dll中的long KeyPress(vk_code)方法，并以Variant接受返回结果
+         * 返回值: 整形数: 0: 失败 1: 成功
+         *
+         */
+        Object[] params = new Object[]{vkCode};
+        String result = elf.execute(Keyboard.class, KeyboardOperations.KeyUp, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("弹起键盘成功");
+        } else {
+            System.out.println("弹起键盘失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
+    }
+
+    /**
+     * 根据指定的字符串序列，依次按顺序按下其中的字符.
+     * @param elf 大漠对象
+     * @return
+     */
+    public static boolean keyPressStr(Elf elf, String str) {
+        /**
+         * 通过Dispatch调用大漠dll中的long KeyPressStr(key_str,delay)方法，并以Variant接受返回结果
+         * 返回值: 整形数: 0: 失败 1: 成功
+         *
+         */
+        Object[] params = new Object[]{str};
+        String result = elf.execute(Keyboard.class, KeyboardOperations.KeyPressStr, params).toString();
+        if (CommonConstants.ONE_STRING.equals(result)) {
+            System.out.println("键盘输入成功");
+        } else {
+            System.out.println("键盘输入失败！");
+        }
+        return CommonConstants.ONE_STRING.equals(result);
+    }
+
 
     /**
      * 指定区域找色

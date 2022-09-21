@@ -8,8 +8,6 @@ import com.qiyou.javaelf.system.Elf;
  */
 public class MouseUtil {
 
-
-
     public static void findPictureAnkLeftClick(Elf elf, String pictureName) throws InterruptedException {
         //1、找到图片
         TwoTuple<Integer, Integer> point = DaMoApi.findPic(elf, 0, 0, 2000, 2000, pictureName, "000000");

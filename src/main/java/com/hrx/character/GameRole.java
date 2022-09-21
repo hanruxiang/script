@@ -37,7 +37,7 @@ public class GameRole extends Character {
         WorldMapUtil.moveToCity(city, elf);
         while (WorldMapUtil.isArrived(city, elf)) {
             //3、每5S检测一次
-            Thread.sleep(5000);
+            Thread.sleep(RandomUtil.getRandomInt(2000, 5000));
         }
     }
 
@@ -51,6 +51,5 @@ public class GameRole extends Character {
     public void doTask(Npc npc, Elf elf) throws Exception{
         npc.doTask(elf);
     }
-
 
 }

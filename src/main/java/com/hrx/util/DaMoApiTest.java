@@ -32,11 +32,7 @@ public class DaMoApiTest {
 
         DaMoApi.setPath(elf);
 
-      /*  TwoTuple<Integer, Integer> xy = DaMoApi.findPic(dmCom, 0,0, 2000,2000, "eee.bmp", "000000");
-        DaMoApi.moveMouse(dmCom, xy.x,xy.y);
-        Thread.sleep(1000);*/
 
-        DaMoApi.setDict(elf, "D:\\hanruxiang\\code\\script\\src\\main\\resources\\data\\ziku.txt");
 
         TwoTuple<Integer, Integer> xy = DaMoApi.findStr(elf, 0,0, 2000,2000, "九", "380000-000000|d28a38-000000|f5af62-000000|388ad2-000000");
         DaMoApi.moveMouse(elf, xy.x,xy.y);

@@ -17,6 +17,7 @@ public class CommonConstants {
 
     public static final String ONE_STRING = "1";
 
+    public static final String EMPTY_STRING = "";
 
     public static class CityConstants {
 
@@ -52,7 +53,7 @@ public class CommonConstants {
                     MouseUtil.findPictureAnkLeftClick(elf, getTaskPicture());
                 }
                 //3、打开背包
-                KeyboardUtil.keyPressMore(new int[]{KeyEvent.VK_ALT, KeyEvent.VK_A});
+                KeyboardUtil.keyPressMore(elf, CommonConstants.KeyboardConstants.打开包裹快捷键);
                 //4、切换到任务物品
                 MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.背包任务物品栏目);
                 //5、右击打图令牌
@@ -64,19 +65,25 @@ public class CommonConstants {
                 //8、确认是否已经到达 todo
                 Thread.sleep(120000);
                 //9、点击坐骑按钮
-                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.坐骑按钮);
-                //10、打开背包
-                KeyboardUtil.keyPressMore(new int[]{KeyEvent.VK_ALT, KeyEvent.VK_A});
-                //11、切换到任务物品
+                KeyboardUtil.keyPressMore(elf, CommonConstants.KeyboardConstants.坐骑快捷键);
+                //10、到达了使用隐身技能
+                KeyboardUtil.keyPressMore(elf, CommonConstants.KeyboardConstants.隐身快捷键);
+                //11、打开背包
+                KeyboardUtil.keyPressMore(elf, CommonConstants.KeyboardConstants.打开包裹快捷键);
+                //12、切换到任务物品
                 MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.背包任务物品栏目);
-                //12、右击打图令牌
+                //13、右击打图令牌
                 MouseUtil.findPictureAnkRightClick(elf, CommonConstants.PictureConstants.惩恶令牌);
-                //13、选择目标怪打
+                //14、加血
+                KeyboardUtil.keyPressMore(elf, CommonConstants.KeyboardConstants.药品快捷键);
+                //15、选择目标怪打
                 AttackUtil.autoChooseAttack(elf, CommonConstants.PictureConstants.打图目标怪图片, 1);
-                //14、捡包裹 todo
-
-                //15、点击坐骑按钮
-                MouseUtil.findPictureAnkLeftClick(elf, CommonConstants.PictureConstants.坐骑按钮);
+                //16、捡包裹
+                AutoPickUpBagsUtil.autoPickUp(elf);
+                //17、使用隐身技能
+                KeyboardUtil.keyPressMore(elf, CommonConstants.KeyboardConstants.隐身快捷键);
+                //18、点击坐骑按钮
+                KeyboardUtil.keyPressMore(elf, CommonConstants.KeyboardConstants.坐骑快捷键);
             }
         };
 
@@ -85,17 +92,17 @@ public class CommonConstants {
     public static class PictureConstants {
 
         /**
-         * 自动寻路按钮图片 todo
+         * 自动寻路按钮图片
          */
         public static final String 自动寻路按钮 = "自动寻路按钮.bmp";
 
         /**
-         * 自动寻路坐标输入框图片 todo
+         * 自动寻路坐标输入框图片
          */
         public static final String 自动寻路坐标输入框 = "自动寻路坐标.bmp";
 
         /**
-         * 背包任务物品栏目框图片 todo
+         * 背包任务物品栏目框图片
          */
         public static final String 背包任务物品栏目 = "背包任务物品栏.bmp";
 
@@ -105,73 +112,63 @@ public class CommonConstants {
         public static final String 继续 = "继续.bmp";
 
         /**
+         * 确认 todo
+         */
+        public static final String 确认 = "确认.bmp";
+
+        /**
          * 完成
          */
         public static final String 完成 = "完成.bmp";
 
         /**
-         * 惩恶令牌图片 todo
+         * 惩恶令牌图片
          */
         public static final String 惩恶令牌 = "惩恶令牌.bmp";
 
         /**
-         * 打图坐标 todo
+         * 打图坐标
          */
         public static final String 打图坐标 = "打图坐标.bmp";
 
         /**
-         * 去往场景确认按钮 todo
+         * 去往场景确认按钮
          */
         public static final String 去往场景确认按钮 = "去往场景确认按钮.bmp";
-
-        /**
-         * 坐骑按钮 todo
-         */
-        public static final String 坐骑按钮 = "坐骑按钮.bmp";
 
         /**
          * 打图目标怪图片
          */
         public static final String 打图目标怪图片 = "打图目标怪.bmp";
 
-    }
-
-    public static class ScreenXyConstants {
-
         /**
-         * 左上角的横坐标,左上角的纵坐标,右下角的横坐标,右下角的纵坐标
-         * 角色名称截屏位置 todo
+         * 包裹图片 todo
          */
-        public static final int[] 角色名称截屏位置 = {100,29,255,75};
-
-        /**
-         * 左上角的横坐标,左上角的纵坐标,右下角的横坐标,右下角的纵坐标
-         * 场景名称截屏位置 todo
-         */
-        public static final int[] 场景名称截屏位置 = {1729,41,1829,67};
-
-    }
-
-    public static class SystemConstants {
-
-        /**
-         * ORC翻译数据包存放路径-eng todo
-         */
-        public static final String ORC_DATA_ENG_PATH = "orc.data";
-
-        /**
-         * ORC临时图片存放目录 todo
-         */
-        public static final String ORC_BUFFER_IMAGE_AREA = "C:\\Users\\jianghui\\Desktop\\tl\\myscript\\image\\";
-
-        /**
-         * 角色图片地址- todo
-         */
-        public static final String ROLE_INFO_PICTURE_PATH = "picture.role";
+        public static final String 包裹图片 = "包裹图片.bmp";
 
     }
 
     public static class KeyboardConstants {
+
+        /**
+         * 平A健
+         */
+        public static final Integer 平A健 = KeyEvent.VK_F1;
+
+        /**
+         * 坐骑快捷键
+         */
+        public static final Integer 坐骑快捷键 = KeyEvent.VK_F8;
+
+        /**
+         * 药品快捷键
+         */
+        public static final Integer 药品快捷键 = KeyEvent.VK_F9;
+
+        /**
+         * 隐身快捷键
+         */
+        public static final Integer 隐身快捷键 = KeyEvent.VK_F10;
 
         /**
          * 自动选择目标快捷键
@@ -179,9 +176,19 @@ public class CommonConstants {
         public static final Integer 自动选择目标 = KeyEvent.VK_F11;
 
         /**
-         * 平A健
+         * 打开世界地图
          */
-        public static final Integer 平A健 = KeyEvent.VK_F1;
+        public static final int[] 打开世界地图快捷键 = new int[]{KeyEvent.VK_ALT, KeyEvent.VK_M};
+
+        /**
+         * 自动寻路快捷键
+         */
+        public static final int[] 自动寻路快捷键 = new int[]{KeyEvent.VK_ALT, 192};
+
+        /**
+         * 打开包裹快捷键
+         */
+        public static final int[] 打开包裹快捷键 = new int[]{KeyEvent.VK_ALT, KeyEvent.VK_A};
 
     }
 
@@ -221,7 +228,6 @@ public class CommonConstants {
         private static final String WINDOWS_02 = "窗口2";
 
     }
-
 
 
 }
