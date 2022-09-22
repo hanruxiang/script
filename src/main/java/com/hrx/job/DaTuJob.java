@@ -6,19 +6,12 @@ import com.hrx.util.DaMoApi;
 import com.hrx.util.KeyboardUtil;
 import com.hrx.util.RandomUtil;
 import com.qiyou.javaelf.system.Elf;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 打图
  * @author hrx
  */
 public class DaTuJob {
-
-    /**
-     * 游戏角色集合
-     */
-    private static List<GameRole> gameRoles = new ArrayList<>(16);
 
     public static void main(String[] args) throws Exception {
         Elf.init();//全局只调用一次,提供带参的方法自定义dm版本;
@@ -50,24 +43,6 @@ public class DaTuJob {
             //4、做任务
             currentRole.doTask(CommonConstants.NpcConstants.吴玠, elf);
         }
-    }
-
-    private static GameRole getRoleByName(String roleName, Elf elf) throws Exception {
-        GameRole newGameRole;
-        if (null == gameRoles || CommonConstants.ZERO == gameRoles.size()) {
-            newGameRole = new GameRole(roleName, elf);
-            gameRoles.add(newGameRole);
-            return newGameRole;
-        }
-        for (GameRole gameRole : gameRoles) {
-            if (roleName.equals(gameRole.getName())) {
-                newGameRole = gameRole;
-                return newGameRole;
-            }
-        }
-        newGameRole = new GameRole(roleName, elf);
-        gameRoles.add(newGameRole);
-        return newGameRole;
     }
 
     public static void execute(String code, String ver) throws Exception {
